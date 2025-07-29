@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  product-service:
+    build: ./product-service
+    container_name: product-service
+    ports:
+      - "8586:8586"
+    env_file: .env
+    depends_on:
+      - product-db
+    networks:
+      - backend
+
+  product-db:
+    image: postgres:15
+    container_name: product-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
